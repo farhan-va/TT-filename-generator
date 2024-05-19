@@ -43,7 +43,7 @@ photo = PhotoImage(data=img)
 win.iconphoto(False, photo)
 
 
-def on_copy():
+def on_copy() -> None:
     # json record initiation
     record = {
         "Company": "",
@@ -167,7 +167,7 @@ def on_copy():
         win.after(5000, clear_output_label)
 
 
-def reset_fields():
+def reset_fields() -> None:
     company.set(company_list[1])
     tt_code_entry.delete(0, END)
     sqcc_div.set(sqcc_div_list[0])
@@ -183,19 +183,19 @@ def reset_fields():
     tt_code_entry.focus_set()
 
 
-def on_reset():
+def on_reset() -> None:
     reset_fields()
     date_entry.insert(END, get_date())
     reset_label.configure(text="All fields cleared!")
     win.after(5000, clear_reset_label)
 
 
-def output_clear(event):
+def output_clear(event: Event) -> None:
     event.widget.delete(0, "end")
     return None
 
 
-def copy_to_clipboard(copyStr):
+def copy_to_clipboard(copyStr: str) -> None:
     win.clipboard_clear()
     win.clipboard_append(copyStr)
     win.update()
@@ -203,33 +203,33 @@ def copy_to_clipboard(copyStr):
     output_display_text.insert(END, copyStr)
 
 
-def get_date():
+def get_date() -> str:
     current_date = datetime.now()
     formatted_date = current_date.strftime("%d-%m-%Y")
     return formatted_date
 
 
-def length_overflow_msg():
+def length_overflow_msg() -> None:
     output_label.configure(text="Max length of 255 characters exceeded!", fg="red")
 
 
-def field_blank_msg():
+def field_blank_msg() -> None:
     output_label.configure(text="Required field(s) left blank!", fg="red")
 
 
-def invalid_data_msg(fieldName):
+def invalid_data_msg(fieldName: str) -> None:
     output_label.configure(text="Invalid data in '" + fieldName + "' field!", fg="red")
 
 
-def clear_output_label():
+def clear_output_label() -> None:
     output_label.configure(text="")
 
 
-def clear_reset_label():
+def clear_reset_label() -> None:
     reset_label.configure(text="")
 
 
-def save_record(ttc, record):
+def save_record(ttc: str, record: json) -> None:
     with open(records_file, "r") as file:
         records = json.load(file)
 
@@ -244,14 +244,14 @@ def save_record(ttc, record):
         json.dump(records, file, indent=4)
 
 
-def search_record(ttc, tt_num):
+def search_record(ttc: str, tt_num: str) -> None:
     try:
         with open(records_file, "r") as file:
             records = json.load(file)
 
             try:
                 saved_record = records.get(ttc)
-                load_record(ttc, tt_num, saved_record)
+                load_record(tt_num, saved_record)
             except:
                 date_entry.insert(END, get_date())
                 output_label.configure(text="Record doesn't exist!", fg="red")
@@ -262,7 +262,7 @@ def search_record(ttc, tt_num):
         win.after(5000, clear_output_label)
 
 
-def load_record(ttc, tt_num, record):
+def load_record(tt_num: str, record: json) -> None:
     reset_fields()
 
     tt_code.set(tt_num)
@@ -283,7 +283,7 @@ def load_record(ttc, tt_num, record):
     win.after(5000, clear_output_label)
 
 
-def on_search():
+def on_search() -> None:
     ttc = company.get() + tt_code.get()
     if ttc == "":
         field_blank_msg()
