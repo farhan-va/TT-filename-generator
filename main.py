@@ -326,7 +326,7 @@ if __name__ == "__main__":
 
     # Footer
     footer_label = Label(
-        win, text="Made by Farhan Arshad\nVersion 1.2", fg="grey", padx=7, pady=7
+        win, text="Made by Farhan Arshad\nVersion 1.2.1", fg="grey", padx=7, pady=7
     )
     footer_label.place(relx=1, rely=1, anchor=SE)
 
