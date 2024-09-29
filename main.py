@@ -100,7 +100,7 @@ def on_copy() -> None:
             invalid_data_msg("Amount")
         else:
             amountStr += "{:,.2f}".format(float(amount.get().replace(",", "")))
-            if amount.get()[0] == "-":
+            if "-" in amount.get(): # instead of checking if 1st char is -, check if it contains a - at all
                 statusSet = "Outgoing to"
             else:
                 statusSet = "Incoming from"
