@@ -153,6 +153,9 @@ def on_copy() -> None:
                 invalid_flag = True
                 invalid_data_msg("Date")
 
+    # if tt_str contains a tab character, remove it
+    tt_str = re.sub(r"\t", "", tt_str)
+
     # static length check
     if len(tt_str) <= 255:
         if blank_flag:
@@ -323,7 +326,7 @@ if __name__ == "__main__":
 
     # Footer
     footer_label = Label(
-        win, text="Made by Farhan Arshad\nVersion 1.1.1", fg="grey", padx=7, pady=7
+        win, text="Made by Farhan Arshad\nVersion 1.2", fg="grey", padx=7, pady=7
     )
     footer_label.place(relx=1, rely=1, anchor=SE)
 
