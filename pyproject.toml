@@ -1,6 +1,6 @@
 [project]
 name = "TT_Filename_Generator"
-version = "1.2.2"
+version = "1.2.3"
 description = "A tool for generating TT filenames"
 readme = "README.md"
 requires-python = ">=3.7"

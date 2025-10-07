@@ -7,7 +7,7 @@ from tkinter import Tk, Frame, Label, Button, Entry, OptionMenu, StringVar, Text
 
 win = Tk()
 win.title("TT Filename Generator")
-win.geometry("600x700")
+win.geometry("600x600")
 # win.iconbitmap("D:\\Chrome Downloads\\icons8-bank-64.ico")
 
 iconimgdata = (
@@ -52,8 +52,7 @@ def on_copy() -> None:
         "Currency": "",
         "Amount": "",
         "Transactee": "",
-        "Bank Ref": "",
-        "Txn No": "",
+        
         "Details": "",
         "Date": "",
     }
@@ -111,27 +110,18 @@ def on_copy() -> None:
     # 123,456,789.01 format
     if transactee.get() == "":
         blank_flag = True
-    if bankref.get() == "":
-        blank_flag = True
-    if txn.get() == "":
-        blank_flag = True
     tt_str += (
         amount_str
         + " "
         + status_set
         + " "
         + transactee.get()
-        + " - Bank ref "
-        + bankref.get()
-        + " Txn "
-        + txn.get()
         + " "
     )
 
     record["Amount"] = amount_str
     record["Transactee"] = transactee.get()
-    record["Bank Ref"] = bankref.get()
-    record["Txn No"] = txn.get()
+    
 
     if details.get() != "":
         tt_str += details.get() + " "
@@ -181,8 +171,6 @@ def reset_fields() -> None:
     currency.set(currency_list[1])
     amount_entry.delete(0, END)
     transactee_entry.delete(0, END)
-    bankref_entry.delete(0, END)
-    txn_entry.delete(0, END)
     details_entry.delete(0, END)
     date_entry.delete(0, END)
     output_display_text.delete("1.0", END)
@@ -258,12 +246,12 @@ def search_record(ttc: str, tt_num: str) -> None:
             try:
                 saved_record = records.get(ttc)
                 load_record(tt_num, saved_record)
-            except:
+            except Exception:
                 date_entry.insert(END, get_date())
                 output_label.configure(text="Record doesn't exist!", fg="red")
                 win.after(5000, clear_output_label)
 
-    except:
+    except Exception:
         output_label.configure(text="No records exist!", fg="red")
         win.after(5000, clear_output_label)
 
@@ -272,16 +260,36 @@ def load_record(tt_num: str, record: json) -> None:
     reset_fields()
 
     tt_code.set(tt_num)
-    company.set(company_list[company_list.index(record["Company"])])
-    sqcc_div.set(sqcc_div_list[sqcc_div_list.index(record["Division"])])
-    bank.set(bank_list[bank_list.index(record["Bank"])])
-    currency.set(currency_list[currency_list.index(record["Currency"])])
-    amount_entry.insert(END, record["Amount"])
-    transactee_entry.insert(END, record["Transactee"])
-    bankref_entry.insert(END, record["Bank Ref"])
-    txn_entry.insert(END, record["Txn No"])
-    details_entry.insert(END, record["Details"])
-    date_entry.insert(END, record["Date"])
+    if not record:
+        date_entry.insert(END, get_date())
+        output_label.configure(text="Record doesn't exist!", fg="red")
+        win.after(5000, clear_output_label)
+        return
+
+    # Safely set option menus (fall back to defaults if value not found)
+    try:
+        company.set(company_list[company_list.index(record.get("Company", ""))])
+    except ValueError:
+        company.set(company_list[1])
+
+    div = record.get("Division", "")
+    if div in sqcc_div_list:
+        sqcc_div.set(div)
+
+    try:
+        bank.set(bank_list[bank_list.index(record.get("Bank", ""))])
+    except ValueError:
+        bank.set(bank_list[1])
+
+    try:
+        currency.set(currency_list[currency_list.index(record.get("Currency", ""))])
+    except ValueError:
+        currency.set(currency_list[1])
+
+    amount_entry.insert(END, record.get("Amount", ""))
+    transactee_entry.insert(END, record.get("Transactee", ""))
+    details_entry.insert(END, record.get("Details", ""))
+    date_entry.insert(END, record.get("Date", ""))
     output_display_text.delete("1.0", END)
     tt_code_entry.focus_set()
 
@@ -329,7 +337,7 @@ if __name__ == "__main__":
 
     # Footer
     footer_label = Label(
-        win, text="Made by Farhan Arshad\nVersion 1.2.2", fg="grey", padx=7, pady=7
+        win, text="Made by Farhan Arshad\nVersion 1.2.3", fg="grey", padx=7, pady=7
     )
     footer_label.place(relx=1, rely=1, anchor=SE)
 
@@ -394,33 +402,19 @@ if __name__ == "__main__":
     transactee_entry = Entry(inputs_frame, textvariable=transactee, width=50)
     transactee_entry.grid(row=6, column=1, pady=3)
 
-    # Bank reference number
-    bankref = StringVar()
-    bankref_label = Label(inputs_frame, text="Bank ref.: ")
-    bankref_label.grid(row=7, column=0, sticky=E)
-    bankref_entry = Entry(inputs_frame, textvariable=bankref, width=50)
-    bankref_entry.grid(row=7, column=1, pady=3)
-
-    # Txn reference number
-    txn = StringVar()
-    txn_label = Label(inputs_frame, text="Transaction no.: ")
-    txn_label.grid(row=8, column=0, sticky=E)
-    txn_entry = Entry(inputs_frame, textvariable=txn, width=50)
-    txn_entry.grid(row=8, column=1, pady=3)
-
     # Txn description
     details = StringVar()
     details_label = Label(inputs_frame, text="Details: ")
-    details_label.grid(row=9, column=0, sticky=E)
+    details_label.grid(row=7, column=0, sticky=E)
     details_entry = Entry(inputs_frame, textvariable=details, width=50)
-    details_entry.grid(row=9, column=1, pady=3)
+    details_entry.grid(row=7, column=1, pady=3)
 
     # Date
     date = StringVar()
     date_label = Label(inputs_frame, text="Date (DD-MM-YYYY): ")
-    date_label.grid(row=10, column=0, sticky=E)
+    date_label.grid(row=8, column=0, sticky=E)
     date_entry = Entry(inputs_frame, textvariable=date, width=50)
-    date_entry.grid(row=10, column=1, pady=3)
+    date_entry.grid(row=8, column=1, pady=3)
 
     # Execution button
     copy_button = Button(
