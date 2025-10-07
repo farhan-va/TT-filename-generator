@@ -3,7 +3,6 @@ from tkinter import *
 from datetime import datetime
 import json
 import os
-import re
 
 win = Tk()
 win.title("TT Filename Generator")
