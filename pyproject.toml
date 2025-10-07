@@ -1,0 +1,12 @@
+[project]
+name = "TT_Filename_Generator"
+version = "1.2.2"
+description = "A tool for generating TT filenames"
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = [
+    "pyinstaller>=5.13.2",
+]
+authors = [
+    { name = "Farhan Arshad", email = "farhan.arshadv@gmail.com" }
+]
