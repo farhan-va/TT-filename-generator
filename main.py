@@ -1,8 +1,9 @@
-import base64
-from tkinter import *
-from datetime import datetime
-import json
 import os
+import json
+import base64
+from datetime import datetime
+
+from tkinter import Tk, Frame, Label, Button, Entry, OptionMenu, StringVar, Text, PhotoImage, CENTER, N, SE, E, W, END, Event
 
 win = Tk()
 win.title("TT Filename Generator")
