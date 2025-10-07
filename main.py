@@ -3,7 +3,24 @@ import json
 import base64
 from datetime import datetime
 
-from tkinter import Tk, Frame, Label, Button, Entry, OptionMenu, StringVar, Text, PhotoImage, CENTER, N, SE, E, W, END, Event
+from tkinter import (
+    Tk,
+    Frame,
+    Label,
+    Button,
+    Entry,
+    OptionMenu,
+    StringVar,
+    Text,
+    PhotoImage,
+    CENTER,
+    N,
+    SE,
+    E,
+    W,
+    END,
+    Event,
+)
 
 win = Tk()
 win.title("TT Filename Generator")
@@ -52,7 +69,6 @@ def on_copy() -> None:
         "Currency": "",
         "Amount": "",
         "Transactee": "",
-        
         "Details": "",
         "Date": "",
     }
@@ -110,18 +126,10 @@ def on_copy() -> None:
     # 123,456,789.01 format
     if transactee.get() == "":
         blank_flag = True
-    tt_str += (
-        amount_str
-        + " "
-        + status_set
-        + " "
-        + transactee.get()
-        + " "
-    )
+    tt_str += amount_str + " " + status_set + " " + transactee.get() + " "
 
     record["Amount"] = amount_str
     record["Transactee"] = transactee.get()
-    
 
     if details.get() != "":
         tt_str += details.get() + " "
