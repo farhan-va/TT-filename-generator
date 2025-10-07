@@ -90,20 +90,23 @@ def on_copy() -> None:
     record["Currency"] = currency.get()
 
     # amount formatting
-    amountStr = ""
-    statusSet = ""
+    amount_str = ""
+    status_set = ""
 
     # outgoing transfers -ve, incoming +ve, status format
     if not blank_flag:
-        if any(c.isalpha() for c in amount.get()):
+        amount_num = amount.get().strip()
+        if any(c.isalpha() for c in amount_num):
             invalid_flag = True
             invalid_data_msg("Amount")
         else:
-            amountStr += "{:,.2f}".format(float(amount.get().replace(",", "")))
-            if "-" in amount.get(): # instead of checking if 1st char is -, check if it contains a - at all
-                statusSet = "Outgoing to"
+            amount_str += "{:,.2f}".format(float(amount.get().replace(",", "")))
+            if (
+                "-" in amount.get()
+            ):  # instead of checking if 1st char is -, check if it contains a - at all
+                status_set = "to"
             else:
-                statusSet = "Incoming from"
+                status_set = "Incoming from"
 
     # 123,456,789.01 format
     if transactee.get() == "":
@@ -113,9 +116,9 @@ def on_copy() -> None:
     if txn.get() == "":
         blank_flag = True
     tt_str += (
-        amountStr
+        amount_str
         + " "
-        + statusSet
+        + status_set
         + " "
         + transactee.get()
         + " - Bank ref "
@@ -125,7 +128,7 @@ def on_copy() -> None:
         + " "
     )
 
-    record["Amount"] = amountStr
+    record["Amount"] = amount_str
     record["Transactee"] = transactee.get()
     record["Bank Ref"] = bankref.get()
     record["Txn No"] = txn.get()
@@ -135,26 +138,26 @@ def on_copy() -> None:
         record["Details"] = details.get()
 
     # date validation and correction
-    dateStr = date.get()
-    if dateStr == "":
+    date_str = date.get()
+    if date_str == "":
         blank_flag = True
     else:
         try:
-            dateObj = datetime.strptime(dateStr, "%d-%m-%Y")
-            tt_str += dateStr
-            record["Date"] = dateStr
+            date_obj = datetime.strptime(date_str, "%d-%m-%Y")
+            tt_str += date_str
+            record["Date"] = date_str
         except ValueError:
             try:
-                dateObj = datetime.strptime(dateStr, "%d/%m/%Y")
-                dateFormatted = dateObj.strftime("%d-%m-%Y")
-                tt_str += dateFormatted
-                record["Date"] = dateFormatted
+                date_obj = datetime.strptime(date_str, "%d/%m/%Y")
+                date_formatted = date_obj.strftime("%d-%m-%Y")
+                tt_str += date_formatted
+                record["Date"] = date_formatted
             except ValueError:
                 invalid_flag = True
                 invalid_data_msg("Date")
 
     # if tt_str contains a tab character, remove it
-    tt_str = re.sub(r"\t", "", tt_str)
+    tt_str = tt_str.replace("\t", "")
 
     # static length check
     if len(tt_str) <= 255:
@@ -198,12 +201,12 @@ def output_clear(event: Event) -> None:
     return None
 
 
-def copy_to_clipboard(copyStr: str) -> None:
+def copy_to_clipboard(copy_str: str) -> None:
     win.clipboard_clear()
-    win.clipboard_append(copyStr)
+    win.clipboard_append(copy_str)
     win.update()
     output_label.configure(text="Generated and copied!", fg="green")
-    output_display_text.insert(END, copyStr)
+    output_display_text.insert(END, copy_str)
 
 
 def get_date() -> str:
@@ -220,8 +223,8 @@ def field_blank_msg() -> None:
     output_label.configure(text="Required field(s) left blank!", fg="red")
 
 
-def invalid_data_msg(fieldName: str) -> None:
-    output_label.configure(text="Invalid data in '" + fieldName + "' field!", fg="red")
+def invalid_data_msg(field_name: str) -> None:
+    output_label.configure(text="Invalid data in '" + field_name + "' field!", fg="red")
 
 
 def clear_output_label() -> None:
@@ -326,7 +329,7 @@ if __name__ == "__main__":
 
     # Footer
     footer_label = Label(
-        win, text="Made by Farhan Arshad\nVersion 1.2.1", fg="grey", padx=7, pady=7
+        win, text="Made by Farhan Arshad\nVersion 1.2.2", fg="grey", padx=7, pady=7
     )
     footer_label.place(relx=1, rely=1, anchor=SE)
 
