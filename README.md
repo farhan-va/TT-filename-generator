@@ -16,7 +16,7 @@ The main program file is `main.py` (Tkinter-based) in this same directory.
 ### Requirements
 
 - Windows
-- Python 3.7+ (a Python installation with tkinter/tcltk support)
+- Python 3.8+ (a Python installation with tkinter/tcltk support)
 - Optional: PyInstaller (to compile to a single .exe)
 
 ### Run from source (development)
