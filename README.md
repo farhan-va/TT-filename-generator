@@ -20,7 +20,7 @@ The easiest way to get started is to download the latest executable from the [Re
 ### Requirements
 
 - Windows
-- Python 3.7+ (a Python installation with tkinter/tcltk support) — only needed if running from source
+- Python 3.8+ (a Python installation with tkinter/tcltk support) — only needed if running from source
 - Optional: [uv](https://docs.astral.sh/uv/) (for development and building)
 
 ### Run from source (development)
