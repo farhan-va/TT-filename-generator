@@ -1,7 +1,8 @@
 import os
 import json
 import base64
-from datetime import datetime
+
+from datetime import datetime, timezone
 
 from tkinter import (
     Tk,
@@ -141,12 +142,16 @@ def on_copy() -> None:
         blank_flag = True
     else:
         try:
-            date_obj = datetime.strptime(date_str, "%d-%m-%Y")
+            date_obj = datetime.strptime(date_str, "%d-%m-%Y").replace(
+                tzinfo=timezone.utc
+            )
             tt_str += date_str
             record["Date"] = date_str
         except ValueError:
             try:
-                date_obj = datetime.strptime(date_str, "%d/%m/%Y")
+                date_obj = datetime.strptime(date_str, "%d/%m/%Y").replace(
+                    tzinfo=timezone.utc
+                )
                 date_formatted = date_obj.strftime("%d-%m-%Y")
                 tt_str += date_formatted
                 record["Date"] = date_formatted
@@ -194,7 +199,6 @@ def on_reset() -> None:
 
 def output_clear(event: Event) -> None:
     event.widget.delete(0, "end")
-    return None
 
 
 def copy_to_clipboard(copy_str: str) -> None:
@@ -206,7 +210,7 @@ def copy_to_clipboard(copy_str: str) -> None:
 
 
 def get_date() -> str:
-    current_date = datetime.now()
+    current_date = datetime.now(timezone.utc)
     formatted_date = current_date.strftime("%d-%m-%Y")
     return formatted_date
 
@@ -250,16 +254,10 @@ def search_record(ttc: str, tt_num: str) -> None:
     try:
         with open(records_file, "r") as file:
             records = json.load(file)
+            saved_record = records.get(ttc)
+            load_record(tt_num, saved_record)
 
-            try:
-                saved_record = records.get(ttc)
-                load_record(tt_num, saved_record)
-            except Exception:
-                date_entry.insert(END, get_date())
-                output_label.configure(text="Record doesn't exist!", fg="red")
-                win.after(5000, clear_output_label)
-
-    except Exception:
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
         output_label.configure(text="No records exist!", fg="red")
         win.after(5000, clear_output_label)
 
@@ -315,7 +313,6 @@ def on_search() -> None:
 
 
 if __name__ == "__main__":
-
     records_file = os.path.join(os.path.expanduser("~"), "Documents", "TT records.json")
 
     if not os.path.exists(records_file):
@@ -345,7 +342,7 @@ if __name__ == "__main__":
 
     # Footer
     footer_label = Label(
-        win, text="Made by Farhan Arshad\nVersion 1.2.3", fg="grey", padx=7, pady=7
+        win, text="Made by Farhan Arshad\nVersion 1.2.4", fg="grey", padx=7, pady=7
     )
     footer_label.place(relx=1, rely=1, anchor=SE)
 
