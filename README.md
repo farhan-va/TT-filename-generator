@@ -13,44 +13,35 @@ This is a small desktop utility (Tkinter GUI) that helps generate standardized "
 
 The main program file is `main.py` (Tkinter-based) in this same directory.
 
+### Quick Start
+
+The easiest way to get started is to download the latest executable from the [Releases](https://github.com/farhan-va/TT-filename-generator/releases) tab.
+
 ### Requirements
 
 - Windows
-- Python 3.7+ (a Python installation with tkinter/tcltk support)
-- Optional: PyInstaller (to compile to a single .exe)
+- Python 3.7+ (a Python installation with tkinter/tcltk support) — only needed if running from source
+- Optional: [uv](https://docs.astral.sh/uv/) (for development and building)
 
 ### Run from source (development)
 
-1. Open PowerShell and (optionally) create/activate a virtual environment from the `src` folder:
+1. Open PowerShell and navigate to the `src` folder, then run:
 
     ```powershell
-    python -m venv .venv
-    .\.venv\Scripts\Activate.ps1
-    ```
-
-2. Run the program:
-
-    ```powershell
-    python main.py
+    uv run main.py
     ```
 
 The GUI should open. Fill the fields and click "Generate and copy to clipboard".
 
 ### Build a single-file Windows .exe with a custom icon (PyInstaller)
 
-These instructions create a single executable and embed the icon located at `icons/ico.ico`.
+These instructions create a single executable and embed the icon located at `icons/ico.ico`. This project uses [uv](https://docs.astral.sh/uv/) to manage dependencies and run PyInstaller.
 
-1. From the `src` folder (where `main.py` and the `icons/` folder live) install PyInstaller in your environment if needed:
-
-   ```powershell
-   pip install pyinstaller
-   ```
-
-2. Build the executable (PowerShell example):
+1. From the `src` folder (where `main.py` and the `icons/` folder live), build the executable:
 
    ```powershell
    # Create a one-file, windowed (no console) executable and embed the .ico file
-   pyinstaller --onefile --windowed --icon=icons\ico.ico --name "TT Filename Generator" main.py
+   uv run pyinstaller --onefile --windowed --icon=icons\ico.ico --name "TT Filename Generator" main.py
    ```
 
 Notes:
@@ -58,8 +49,7 @@ Notes:
 - Use the relative path `icons\ico.ico` when running from the `src` folder. If you run PyInstaller from the repository root, point to `src\icons\ico.ico` instead.
 - The `--windowed` flag prevents a console window from appearing. Remove it if you want a console for debugging.
 - After a successful build the executable will be in `dist\` (for example `dist\TT Filename Generator.exe`).
-
-1. Test the produced exe by running the file from `dist`.
+- Test the produced exe by running the file from `dist`.
 
 ### Troubleshooting and tips
 
