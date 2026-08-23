@@ -3,10 +3,15 @@ name = "TT_Filename_Generator"
 version = "1.2.3"
 description = "A tool for generating TT filenames"
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 dependencies = [
-    "pyinstaller>=5.13.2",
+    "datetime>=5.5",
 ]
 authors = [
     { name = "Farhan Arshad", email = "farhan.arshadv@gmail.com" }
+]
+
+[dependency-groups]
+dev = [
+    "pyinstaller>=5.13.2",
 ]
