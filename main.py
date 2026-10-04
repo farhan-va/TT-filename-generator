@@ -65,7 +65,6 @@ def on_copy() -> None:
     # json record initiation
     record = {
         "Company": "",
-        "Division": "",
         "Bank": "",
         "Currency": "",
         "Amount": "",
@@ -87,13 +86,6 @@ def on_copy() -> None:
         blank_flag = True
 
     record["Company"] = company.get()
-
-    # checking for division for SQCC only
-    if company.get() == "SQCC":
-        if sqcc_div.get() == "":
-            blank_flag = True
-        tt_str += " " + sqcc_div.get()
-        record["Division"] = sqcc_div.get()
 
     # more of title
     tt_str += " " + bank.get() + " " + currency.get() + " "
@@ -179,7 +171,6 @@ def on_copy() -> None:
 def reset_fields() -> None:
     company.set(company_list[1])
     tt_code_entry.delete(0, END)
-    sqcc_div.set(sqcc_div_list[0])
     bank.set(bank_list[1])
     currency.set(currency_list[1])
     amount_entry.delete(0, END)
@@ -278,10 +269,6 @@ def load_record(tt_num: str, record: json) -> None:
     except ValueError:
         company.set(company_list[1])
 
-    div = record.get("Division", "")
-    if div in sqcc_div_list:
-        sqcc_div.set(div)
-
     try:
         bank.set(bank_list[bank_list.index(record.get("Bank", ""))])
     except ValueError:
@@ -342,7 +329,7 @@ if __name__ == "__main__":
 
     # Footer
     footer_label = Label(
-        win, text="Made by Farhan Arshad\nVersion 1.2.4", fg="grey", padx=7, pady=7
+        win, text="Made by Farhan Arshad\nVersion 1.3.0", fg="grey", padx=7, pady=7
     )
     footer_label.place(relx=1, rely=1, anchor=SE)
 
@@ -350,7 +337,7 @@ if __name__ == "__main__":
     company = StringVar()
     company_label = Label(inputs_frame, text="Company: ", pady=7)
     company_label.grid(row=0, column=0, sticky=E)
-    company_list = ["", "AR", "SQSS", "SQCC", "BA"]
+    company_list = ["", "AR", "SQSS", "BA", "MC"]
     company.set(company_list[1])
     company_dropdown = OptionMenu(inputs_frame, company, *company_list)
     company_dropdown.grid(row=0, column=1, sticky=W, pady=3)
@@ -366,78 +353,69 @@ if __name__ == "__main__":
     search_button = Button(inputs_frame, text="Search", command=on_search)
     search_button.grid(row=1, column=2, padx=(3, 7))
 
-    # Division (for SQCC only)
-    sqcc_div = StringVar()
-    sqcc_div_label = Label(inputs_frame, text="Division (for SQCC only): ")
-    sqcc_div_label.grid(row=2, column=0, sticky=E)
-    sqcc_div_list = ["", "WH", "FS", "IT", "ST", "TY"]
-    sqcc_div.set(sqcc_div_list[0])
-    sqcc_div_dropdown = OptionMenu(inputs_frame, sqcc_div, *sqcc_div_list)
-    sqcc_div_dropdown.grid(row=2, column=1, sticky=W, pady=3)
-
     # Bank
     bank = StringVar()
     bank_label = Label(inputs_frame, text="Bank: ")
-    bank_label.grid(row=3, column=0, sticky=E)
+    bank_label.grid(row=2, column=0, sticky=E)
     bank_list = ["", "NCB", "RB", "ALJ"]
     bank.set(bank_list[1])
     bank_dropdown = OptionMenu(inputs_frame, bank, *bank_list)
-    bank_dropdown.grid(row=3, column=1, sticky=W, pady=3)
+    bank_dropdown.grid(row=2, column=1, sticky=W, pady=3)
 
     # Currency
     currency = StringVar()
     currency_label = Label(inputs_frame, text="Currency: ")
-    currency_label.grid(row=4, column=0, sticky=E)
+    currency_label.grid(row=3, column=0, sticky=E)
     currency_list = ["", "SR", "USD"]
     currency.set(currency_list[1])
     currency_dropdown = OptionMenu(inputs_frame, currency, *currency_list)
-    currency_dropdown.grid(row=4, column=1, sticky=W, pady=3)
+    currency_dropdown.grid(row=3, column=1, sticky=W, pady=3)
 
     # Amount
     amount = StringVar()
     amount_label = Label(inputs_frame, text="Amount: ")
-    amount_label.grid(row=5, column=0, sticky=E)
+    amount_label.grid(row=4, column=0, sticky=E)
     amount_entry = Entry(inputs_frame, textvariable=amount, width=50)
-    amount_entry.grid(row=5, column=1, pady=3)
+    amount_entry.grid(row=4, column=1, pady=3)
 
     # Transactee
     transactee = StringVar()
     transactee_label = Label(inputs_frame, text="Vendor/Customer: ")
-    transactee_label.grid(row=6, column=0, sticky=E)
+    transactee_label.grid(row=5, column=0, sticky=E)
     transactee_entry = Entry(inputs_frame, textvariable=transactee, width=50)
-    transactee_entry.grid(row=6, column=1, pady=3)
+    transactee_entry.grid(row=5, column=1, pady=3)
 
     # Txn description
     details = StringVar()
     details_label = Label(inputs_frame, text="Details: ")
-    details_label.grid(row=7, column=0, sticky=E)
+    details_label.grid(row=6, column=0, sticky=E)
     details_entry = Entry(inputs_frame, textvariable=details, width=50)
-    details_entry.grid(row=7, column=1, pady=3)
+    details_entry.grid(row=6, column=1, pady=3)
 
     # Date
     date = StringVar()
     date_label = Label(inputs_frame, text="Date (DD-MM-YYYY): ")
-    date_label.grid(row=8, column=0, sticky=E)
+    date_label.grid(row=7, column=0, sticky=E)
     date_entry = Entry(inputs_frame, textvariable=date, width=50)
-    date_entry.grid(row=8, column=1, pady=3)
+    date_entry.grid(row=7, column=1, pady=3)
 
     # Execution button
     copy_button = Button(
         inputs_frame, text="Generate and copy to clipboard", command=on_copy
     )
-    copy_button.grid(row=11, column=0, pady=10)
+    copy_button.grid(row=10, column=0, pady=10)
 
     # Result indicator
     output_label = Label(inputs_frame, text="", pady=10)
-    output_label.grid(row=11, column=1)
+    output_label.grid(row=10, column=1)
 
     # Reset button
     reset_button = Button(inputs_frame, text="Reset fields", command=on_reset)
-    reset_button.grid(row=12, column=1, pady=5)
+    reset_button.grid(row=11, column=1, pady=5)
 
     # Reset indicator
     reset_label = Label(inputs_frame, text="", pady=5)
-    reset_label.grid(row=12, column=0)
+    reset_label.grid(row=11, column=0)
 
     # Output display
     output_display_label = Label(main_frame, text="File name: ")
